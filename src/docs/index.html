@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ReloadPi Browse SDK — Embed gift cards, top-ups & eSIMs in minutes</title>
+<meta name="description" content="Official read-only SDK for browsing the ReloadPi / Shoppi catalog. Embed gift cards, mobile top-ups and eSIM plans into your app. Earn referral commission on every sale."/>
+<meta property="og:title" content="ReloadPi Browse SDK"/>
+<meta property="og:description" content="Embed the ReloadPi catalog. Earn on every sale."/>
+<meta property="og:type" content="website"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --accent: #00e5a0;
+    --accent2: #0066ff;
+    --text: #f0efe8;
+    --muted: #7a7a8a;
+    --danger: #ff4d6d;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+ 
+  html { scroll-behavior: smooth; }
+ 
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+ 
+  /* GRID NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+ 
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 56px;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+ 
+  .nav-logo {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+  }
+ 
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+ 
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+ 
+  .nav-links a:hover { color: var(--text); }
+ 
+  .nav-cta {
+    background: var(--accent) !important;
+    color: #000 !important;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+  }
+ 
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 80px 2rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    z-index: 1;
+  }
+ 
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    width: 100%;
+  }
+ 
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.25);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.06em;
+  }
+ 
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+ 
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+ 
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+  }
+ 
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+ 
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 440px;
+  }
+ 
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+ 
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #000;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.02em;
+  }
+ 
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+ 
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.15s;
+    letter-spacing: 0.02em;
+  }
+ 
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+ 
+  /* HERO CODE PANEL */
+  .hero-code {
+    position: relative;
+  }
+ 
+  .code-window {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+  }
+ 
+  .code-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+ 
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+ 
+  .code-label {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+ 
+  pre {
+    padding: 1.5rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+ 
+  .kw { color: #c792ea; }
+  .str { color: #c3e88d; }
+  .fn { color: #82aaff; }
+  .cm { color: #546e7a; font-style: italic; }
+  .key { color: #f78c6c; }
+  .val { color: var(--accent); }
+ 
+  /* INSTALL STRIP */
+  .install-strip {
+    position: relative;
+    z-index: 1;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    font-family: var(--mono);
+    font-size: 14px;
+  }
+ 
+  .install-cmd {
+    color: var(--accent);
+  }
+ 
+  .install-copy {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 4px 12px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+ 
+  .install-copy:hover { color: var(--text); border-color: var(--border2); }
+  .install-copy.copied { color: var(--accent); border-color: var(--accent); }
+ 
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+ 
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+ 
+  h2 {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+  }
+ 
+  .section-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 540px;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+ 
+  /* HOW IT WORKS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+ 
+  .step {
+    background: var(--surface);
+    padding: 2rem 1.75rem;
+    position: relative;
+  }
+ 
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    letter-spacing: 0.08em;
+  }
+ 
+  .step h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+ 
+  .step p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+ 
+  .step-accent {
+    display: inline-block;
+    width: 28px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+ 
+  /* MODULES */
+  .modules {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+ 
+  .module-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+ 
+  .module-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+  }
+ 
+  .module-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+ 
+  .module-card h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+ 
+  .module-card p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+ 
+  .module-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+ 
+  .method {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,229,160,0.07);
+    padding: 3px 8px;
+    border-radius: 3px;
+    display: inline-block;
+    width: fit-content;
+  }
+ 
+  /* REFERRAL */
+  .referral-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem;
+    align-items: start;
+  }
+ 
+  .referral-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+ 
+  .flow-step {
+    background: var(--surface);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+ 
+  .flow-step strong { color: var(--text); font-size: 0.9rem; }
+ 
+  .flow-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+ 
+  .referral-url {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+ 
+  .url-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1rem;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+ 
+  .url-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(0,229,160,0.4); }
+ 
+  .url-text {
+    padding: 1rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+ 
+  .url-text span { color: var(--accent); }
+ 
+  /* SECURITY */
+  .security-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+ 
+  .sec-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+ 
+  .sec-card.safe { border-left: 3px solid var(--accent); }
+  .sec-card.warn { border-left: 3px solid var(--danger); }
+ 
+  .sec-card h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+ 
+  .sec-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+ 
+  .sec-badge.safe { background: rgba(0,229,160,0.12); color: var(--accent); }
+  .sec-badge.warn { background: rgba(255,77,109,0.12); color: var(--danger); }
+ 
+  .sec-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+ 
+  .sec-list li {
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+ 
+  .sec-list li::before {
+    content: '—';
+    color: var(--border2);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+ 
+  /* ACCESS */
+  .access-box {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+ 
+  .access-box h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+ 
+  .access-box p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+ 
+  .contact-email {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    border-bottom: 1px solid rgba(0,229,160,0.3);
+    padding-bottom: 2px;
+    text-decoration: none;
+  }
+ 
+  .access-checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+ 
+  .access-checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+ 
+  .check {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+    color: var(--accent);
+    margin-top: 1px;
+  }
+ 
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+ 
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+ 
+  /* GLOW */
+  .glow-orb {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,160,0.04) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+    pointer-events: none;
+    z-index: 0;
+  }
+ 
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero-inner, .referral-grid, .access-box { grid-template-columns: 1fr; }
+    .steps, .modules, .security-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    h1 { font-size: 2rem; }
+  }
+ 
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  .hero-left > * {
+    animation: fadeUp 0.6s ease both;
+  }
+ 
+  .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.4s; }
+ 
+  .hero-code { animation: fadeUp 0.7s 0.3s ease both; }
+</style>
+</head>
+<body>
+ 
+<div class="glow-orb"></div>
+ 
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ReloadPi SDK</a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How it works</a></li>
+    <li><a href="#modules">Modules</a></li>
+    <li><a href="#referral">Referral</a></li>
+    <li><a href="#security">Security</a></li>
+    <li><a href="#access" class="nav-cta">Get API key</a></li>
+  </ul>
+</nav>
+ 
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="badge">v0.1 — Early Access</div>
+      <h1>Embed <em>gift cards,</em> top-ups &amp; eSIMs in minutes</h1>
+      <p class="hero-sub">The official ReloadPi Browse SDK gives your app read-only access to our full digital goods catalog — with built-in referral tracking and AI agent support.</p>
+      <div class="hero-actions">
+        <a href="https://www.npmjs.com/package/@crossabc/reloadpi-browse-sdk" class="btn-primary" target="_blank">
+          ↗ npm install
+        </a>
+        <a href="https://github.com/crossabc/reloadpi-browse-sdk" class="btn-secondary" target="_blank">
+          GitHub →
+        </a>
+      </div>
+    </div>
+ 
+    <div class="hero-code">
+      <div class="code-window">
+        <div class="code-titlebar">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span class="code-label">quickstart.ts</span>
+        </div>
+        <pre><span class="kw">import</span> { <span class="fn">ShoppiBrowseSDK</span> } <span class="kw">from</span> <span class="str">"@crossabc/reloadpi-browse-sdk"</span>;
+ 
+<span class="kw">const</span> sdk = <span class="kw">new</span> <span class="fn">ShoppiBrowseSDK</span>({
+  <span class="key">baseUrl</span>: <span class="str">"https://api.shoppi.com/api/"</span>, <span class="cm">// trailing slash required</span>
+  <span class="key">apiKey</span>: <span class="str">"YOUR_API_KEY"</span>,
+  <span class="key">referralCode</span>: <span class="str">"PARTNER_ABC"</span>,
+});
+ 
+<span class="cm">// Browse gift cards</span>
+<span class="kw">const</span> vouchers = <span class="kw">await</span> sdk.vouchers.<span class="fn">searchOffers</span>({
+  <span class="key">country</span>: <span class="str">"NG"</span>,
+  <span class="key">brand</span>: <span class="str">"Amazon"</span>,
+});
+ 
+<span class="cm">// Get referral link → you earn on every sale</span>
+<span class="kw">const</span> url = sdk.<span class="fn">getBuyUrl</span>(<span class="str">"vouchers"</span>, <span class="val">vouchers.items[0].id</span>);
+<span class="cm">// https://reloadpi.com/vouchers/offer/ID?ref=PARTNER_ABC</span></pre>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- INSTALL STRIP -->
+<div class="install-strip">
+  <span style="color: var(--muted); font-size: 12px;">INSTALL</span>
+  <span class="install-cmd">npm install @crossabc/reloadpi-browse-sdk</span>
+  <button class="install-copy" onclick="copyInstall(this)">copy</button>
+</div>
+ 
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="section-tag">How it works</div>
+  <h2>From install to live in under 10 minutes</h2>
+  <p class="section-sub">The SDK talks exclusively to ReloadPi's public API. You never touch provider APIs, handle crypto, or manage fulfillment.</p>
+ 
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-accent"></div>
+      <h3>Install &amp; configure</h3>
+      <p>Add the npm package, pass your API key and referral code. One object, three optional fields.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-accent"></div>
+      <h3>Browse the catalog</h3>
+      <p>Query gift cards, mobile top-ups, or eSIM plans. Filter by country, brand, or operator. Clean typed responses every time.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-accent"></div>
+      <h3>Send users to ReloadPi</h3>
+      <p>Generate a referral link with <code style="font-family:var(--mono);font-size:12px;color:var(--accent)">getBuyUrl()</code>. We handle checkout, crypto payment, and delivery. You earn commission.</p>
+    </div>
+  </div>
+</section>
+ 
+<!-- MODULES -->
+<section id="modules" style="padding-top: 0;">
+  <div class="section-tag">Modules</div>
+  <h2>Three domains. One clean interface.</h2>
+  <p class="section-sub">Every module follows the same pattern: search, get by ID, list metadata. No surprises.</p>
+ 
+  <div class="modules">
+    <div class="module-card">
+      <div class="module-icon">🎟️</div>
+      <h3>Vouchers</h3>
+      <p>Gift cards for global brands — Amazon, Adidas, Asda and hundreds more. Filter by country and brand.</p>
+      <div class="module-methods">
+        <span class="method">searchOffers()</span>
+        <span class="method">getOfferById()</span>
+        <span class="method">listBrands()</span>
+      </div>
+    </div>
+ 
+    <div class="module-card">
+      <div class="module-icon">📱</div>
+      <h3>Mobile Top-ups</h3>
+      <p>Instant recharges for phone numbers worldwide. Filter by country and operator.</p>
+      <div class="module-methods">
+        <span class="method">searchOffers()</span>
+        <span class="method">getOfferById()</span>
+        <span class="method">listOperators()</span>
+      </div>
+    </div>
+ 
+    <div class="module-card">
+      <div class="module-icon">📶</div>
+      <h3>eSIM Plans</h3>
+      <p>Travel eSIM data plans for international roaming. Requires eSIM-capable, carrier-unlocked device.</p>
+      <div class="module-methods">
+        <span class="method">searchPlans()</span>
+        <span class="method">getPlanById()</span>
+        <span class="method">listCountries()</span>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- REFERRAL -->
+<section id="referral">
+  <div class="section-tag">Referral model</div>
+  <h2>You browse. We sell. You earn.</h2>
+  <p class="section-sub">Every link your app generates includes your referral code. When a user completes a purchase on ReloadPi, you get credit. No payment integration required on your side.</p>
+ 
+  <div class="referral-grid">
+    <div>
+      <div class="referral-flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div><strong>User browses your app</strong><br>Your frontend queries the SDK for vouchers, top-ups, or eSIMs</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div><strong>SDK generates a referral link</strong><br>One call to <code style="font-family:var(--mono);font-size:12px;color:var(--accent)">getBuyUrl()</code> or <code style="font-family:var(--mono);font-size:12px;color:var(--accent)">getCatalogUrl()</code></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div><strong>User lands on ReloadPi</strong><br>Pays with Pi Coin, USDC, Bitcoin, or other supported crypto</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div><strong>You earn commission</strong><br>Tracked via your referral code. Settled in crypto.</div>
+        </div>
+      </div>
+    </div>
+ 
+    <div>
+      <p style="font-size: 0.82rem; color: var(--muted); margin-bottom: 0.75rem; font-family: var(--mono); letter-spacing: 0.04em;">GENERATED LINK</p>
+      <div class="referral-url">
+        <div class="url-bar">
+          <div class="url-dot"></div>
+          <span style="color: var(--muted);">reloadpi.com</span>
+        </div>
+        <div class="url-text">
+          https://reloadpi.com/<span style="color:var(--text)">vouchers</span>/offer/<span style="color:var(--text)">AMAZON_NG_001</span>?ref=<span>PARTNER_ABC</span>
+        </div>
+      </div>
+ 
+      <div style="margin-top: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
+        <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.82rem; color: var(--muted); font-family: var(--mono);">catalog link</div>
+        <div class="url-text">
+          https://reloadpi.com/<span style="color:var(--text)">vouchers</span>?country=<span style="color:var(--text)">NG</span>&amp;ref=<span>PARTNER_ABC</span>
+        </div>
+      </div>
+ 
+      <p style="margin-top: 1.25rem; font-size: 0.8rem; color: var(--muted); line-height: 1.6;">
+        A 5% conversion fee applies if the payment currency differs from the creator's settlement currency or if a Pi-supported wallet is not used. All transactions are final once confirmed.
+      </p>
+    </div>
+  </div>
+</section>
+ 
+<!-- SECURITY -->
+<section id="security" style="padding-top: 0;">
+  <div class="section-tag">Security model</div>
+  <h2>Read-only by design.</h2>
+  <p class="section-sub">This SDK cannot make purchases, trigger payments, or modify account state. Safe to embed in client-side apps and AI agents.</p>
+ 
+  <div class="security-grid">
+    <div class="sec-card safe">
+      <h4>What this SDK <em style="font-style:normal;color:var(--accent)">can</em> do <span class="sec-badge safe">SAFE</span></h4>
+      <ul class="sec-list">
+        <li>Browse and search the full product catalog</li>
+        <li>Fetch individual offer or plan details</li>
+        <li>List brands, operators, and countries</li>
+        <li>Generate referral URLs for any product</li>
+        <li>Be used inside AI agent tool-calling flows</li>
+        <li>Be embedded in frontend apps without risk</li>
+      </ul>
+    </div>
+ 
+    <div class="sec-card warn">
+      <h4>What this SDK <em style="font-style:normal;color:var(--danger)">cannot</em> do <span class="sec-badge warn">BLOCKED</span></h4>
+      <ul class="sec-list">
+        <li>Initiate purchases or transactions</li>
+        <li>Process or handle crypto payments</li>
+        <li>Access or modify account balances</li>
+        <li>Create user accounts or sessions</li>
+        <li>Access provider APIs directly</li>
+        <li>Expose internal system data</li>
+      </ul>
+    </div>
+  </div>
+ 
+  <div style="margin-top: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; font-size: 0.82rem; color: var(--muted); line-height: 1.7;">
+    <strong style="color: var(--text); font-size: 0.85rem;">API key handling:</strong> Your API key is sent as a request header to <code style="font-family:var(--mono);font-size:11px;color:var(--accent)">api.shoppi.com</code> only. Never expose your key in client-side code — use the SDK server-side or behind a proxy. Keys can be rotated or revoked at any time. Rate limits and permissions are enforced server-side.
+  </div>
+ 
+  <div style="margin-top: 1rem; background: var(--surface); border: 1px solid rgba(0,229,160,0.15); border-left: 3px solid var(--accent); border-radius: 8px; padding: 1.25rem 1.5rem; font-size: 0.82rem; color: var(--muted); line-height: 1.7;">
+    <strong style="color: var(--text); font-size: 0.85rem;">Platform note:</strong> <strong style="color:var(--text)">ReloadPi</strong> is the consumer product. The underlying platform is <strong style="color:var(--text)">Shoppi</strong>, operated by CrossLabs. The SDK hits <code style="font-family:var(--mono);font-size:11px;color:var(--accent)">api.shoppi.com</code> — this is intentional. ReloadPi is built on Shoppi infrastructure, and the API contract is stable. The <code style="font-family:var(--mono);font-size:11px;color:var(--accent)">shopUrl</code> config option defaults to <code style="font-family:var(--mono);font-size:11px;color:var(--accent)">https://reloadpi.com</code>, so all referral links point to the consumer storefront correctly.
+  </div>
+</section>
+ 
+<!-- ERROR HANDLING -->
+<section style="padding-top: 0;">
+  <div class="section-tag">Error handling</div>
+  <h2>Typed errors, always.</h2>
+  <p class="section-sub">Every API failure throws a <code style="font-family:var(--mono);font-size:14px;color:var(--accent)">ShoppiError</code> with a status code, error code, and message — no raw HTTP surprises.</p>
+ 
+  <div class="code-window" style="max-width: 640px;">
+    <div class="code-titlebar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span class="code-label">error-handling.ts</span>
+    </div>
+    <pre><span class="kw">import</span> { <span class="fn">ShoppiBrowseSDK</span>, <span class="fn">ShoppiError</span> } <span class="kw">from</span> <span class="str">"@crossabc/reloadpi-browse-sdk"</span>;
+ 
+<span class="kw">try</span> {
+  <span class="kw">await</span> sdk.vouchers.<span class="fn">searchOffers</span>({ <span class="key">country</span>: <span class="str">"NG"</span> });
+} <span class="kw">catch</span> (err) {
+  <span class="kw">if</span> (err <span class="kw">instanceof</span> <span class="fn">ShoppiError</span>) {
+    console.<span class="fn">error</span>(err.<span class="key">status</span>, err.<span class="key">code</span>, err.<span class="key">message</span>);
+    <span class="cm">// e.g. 401 "UNAUTHORIZED" "Invalid or missing API key"</span>
+  }
+}</pre>
+  </div>
+</section>
+ 
+<!-- AI AGENTS -->
+<section style="padding-top: 0;">
+  <div class="section-tag">AI-ready</div>
+  <h2>Built for agents.</h2>
+  <p class="section-sub">The SDK ships with a tool layer for OpenAI function calling, LangChain, and MCP-style integrations.</p>
+ 
+  <div class="code-window" style="max-width: 640px;">
+    <div class="code-titlebar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span class="code-label">agent.ts</span>
+    </div>
+    <pre><span class="kw">import</span> { <span class="fn">ShoppiBrowseSDK</span>, <span class="fn">createBrowseTools</span> } <span class="kw">from</span> <span class="str">"@crossabc/reloadpi-browse-sdk"</span>;
+ 
+<span class="kw">const</span> sdk = <span class="kw">new</span> <span class="fn">ShoppiBrowseSDK</span>({
+  <span class="key">baseUrl</span>: <span class="str">"https://api.shoppi.com/api/"</span>,
+  <span class="key">apiKey</span>: <span class="str">"..."</span>,
+  <span class="key">referralCode</span>: <span class="str">"..."</span>,
+});
+ 
+<span class="cm">// Drop into any OpenAI / LangChain / MCP agent</span>
+<span class="kw">const</span> tools = <span class="fn">createBrowseTools</span>(sdk);
+ 
+<span class="cm">// Tools available to your agent:</span>
+<span class="cm">// search_voucher_offers, get_voucher_offer</span>
+<span class="cm">// search_topup_offers, get_topup_offer</span>
+<span class="cm">// search_esim_plans, get_esim_plan</span></pre>
+  </div>
+</section>
+ 
+<!-- ACCESS -->
+<section id="access" style="padding-top: 0; padding-bottom: 8rem;">
+  <div class="access-box">
+    <div>
+      <div class="section-tag">Partner access</div>
+      <h3>Request your API key</h3>
+      <p>The package is publicly installable. API access is controlled via keys issued to approved partners. Contact us to apply — we'll typically respond within 48 hours.</p>
+      <a href="/cdn-cgi/l/email-protection#e69687949288839495a694838a898782968fc885898b" class="contact-email"><span class="__cf_email__" data-cfemail="3a4a5b484e545f48497a485f56555b5e4a5314595557">[email&#160;protected]</span></a>
+    </div>
+ 
+    <ul class="access-checklist">
+      <li><div class="check">✓</div>Free to integrate — no upfront cost</li>
+      <li><div class="check">✓</div>Commission earned on every completed sale</li>
+      <li><div class="check">✓</div>Keys are scoped, rate-limited, and revocable</li>
+      <li><div class="check">✓</div>Access to full voucher, top-up, and eSIM catalog</li>
+      <li><div class="check">✓</div>Crypto-native — Pi Coin, USDC, Bitcoin supported</li>
+      <li><div class="check">✓</div>Early access to v2 purchase API (coming soon)</div></li>
+    </ul>
+  </div>
+</section>
+ 
+<footer>
+  <span>© 2025 CrossLabs · ReloadPi</span>
+  <div style="display:flex; gap: 1.5rem;">
+    <a href="https://reloadpi.com" target="_blank">reloadpi.com</a>
+    <a href="https://github.com/crossabc/reloadpi-browse-sdk" target="_blank">GitHub</a>
+    <a href="https://www.npmjs.com/package/@crossabc/reloadpi-browse-sdk" target="_blank">npm</a>
+    <a href="https://www.reddit.com/r/reloadpi" target="_blank">Reddit</a>
+  </div>
+</footer>
+
+<script>
+function copyInstall(btn) {
+  navigator.clipboard.writeText('npm install @crossabc/reloadpi-browse-sdk').then(() => {
+    btn.textContent = 'copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
