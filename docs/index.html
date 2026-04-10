@@ -718,17 +718,40 @@
     <div class="hero-left">
       <div class="badge">v0.1 — Early Access</div>
       <h1>Embed <em>gift cards,</em> top-ups &amp; eSIMs in minutes</h1>
-      <p class="hero-sub">The official ReloadPi Browse SDK gives your app read-only access to our full digital goods catalog — with built-in referral tracking and AI agent support.</p>
+      <p class="hero-sub">
+        The official ReloadPi Browse SDK gives your app read-only access to our
+        full digital goods catalog — with built-in referral tracking and AI
+        agent support.
+      </p>
+
       <div class="hero-actions">
-        <a href="https://www.npmjs.com/package/@crossabc/reloadpi-browse-sdk" class="btn-primary" target="_blank">
+        <a
+          href="https://www.npmjs.com/package/@crossabc/reloadpi-browse-sdk"
+          class="btn-primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           ↗ npm install
         </a>
-        <a href="https://github.com/crossabc/reloadpi-browse-sdk" class="btn-secondary" target="_blank">
+        <a
+          href="https://github.com/crossabc/reloadpi-browse-sdk"
+          class="btn-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           GitHub →
+        </a>
+        <a
+          href="https://reloadpi.com/partner/sdk"
+          class="btn-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ReloadPi Docs →
         </a>
       </div>
     </div>
- 
+
     <div class="hero-code">
       <div class="code-window">
         <div class="code-titlebar">
@@ -738,19 +761,19 @@
           <span class="code-label">quickstart.ts</span>
         </div>
         <pre><span class="kw">import</span> { <span class="fn">ShoppiBrowseSDK</span> } <span class="kw">from</span> <span class="str">"@crossabc/reloadpi-browse-sdk"</span>;
- 
+
 <span class="kw">const</span> sdk = <span class="kw">new</span> <span class="fn">ShoppiBrowseSDK</span>({
   <span class="key">baseUrl</span>: <span class="str">"https://api.shoppi.com/api/"</span>, <span class="cm">// trailing slash required</span>
   <span class="key">apiKey</span>: <span class="str">"YOUR_API_KEY"</span>,
   <span class="key">referralCode</span>: <span class="str">"PARTNER_ABC"</span>,
 });
- 
+
 <span class="cm">// Browse gift cards</span>
 <span class="kw">const</span> vouchers = <span class="kw">await</span> sdk.vouchers.<span class="fn">searchOffers</span>({
   <span class="key">country</span>: <span class="str">"NG"</span>,
   <span class="key">brand</span>: <span class="str">"Amazon"</span>,
 });
- 
+
 <span class="cm">// Get referral link → you earn on every sale</span>
 <span class="kw">const</span> url = sdk.<span class="fn">getBuyUrl</span>(<span class="str">"vouchers"</span>, <span class="val">vouchers.items[0].id</span>);
 <span class="cm">// https://reloadpi.com/vouchers/offer/ID?ref=PARTNER_ABC</span></pre>
@@ -990,23 +1013,28 @@
     <div>
       <div class="section-tag">Partner access</div>
       <h3>Request your API key</h3>
-      <p>The package is publicly installable. API access is controlled via keys issued to approved partners. Contact us to apply — we'll typically respond within 48 hours.</p>
-     <a href="mailto:partners@reloadpi.com" class="contact-email">
-  partners@reloadpi.com
-</a>
+      <p>The package is publicly installable. API access is controlled via keys issued to approved partners.</p>
+
+      <div class="hero-actions" style="margin-top: 1rem;">
+        <a href="https://reloadpi.com/partner/apply" class="btn-primary" target="_blank" rel="noopener noreferrer">
+          Apply as Partner
+        </a>
+        <a href="https://reloadpi.com/partner/sdk" class="btn-secondary" target="_blank" rel="noopener noreferrer">
+          View ReloadPi SDK Page
+        </a>
+      </div>
     </div>
- 
+
     <ul class="access-checklist">
       <li><div class="check">✓</div>Free to integrate — no upfront cost</li>
       <li><div class="check">✓</div>Commission earned on every completed sale</li>
       <li><div class="check">✓</div>Keys are scoped, rate-limited, and revocable</li>
       <li><div class="check">✓</div>Access to full voucher, top-up, and eSIM catalog</li>
       <li><div class="check">✓</div>Crypto-native — Pi Coin, USDC, Bitcoin supported</li>
-      <li><div class="check">✓</div>Early access to v2 purchase API (coming soon)</div></li>
+      <li><div class="check">✓</div>Early access to v2 purchase API (coming soon)</li>
     </ul>
   </div>
 </section>
- 
 <footer>
   <span>© 2025 CrossLabs · ReloadPi</span>
   <div style="display:flex; gap: 1.5rem;">
